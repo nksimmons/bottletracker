@@ -19,6 +19,12 @@
  if (localUserId != null) {
      userId = localUserId;
      dbStuff();
+     database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
+         if (dbOnceJustCalled === false) {
+             $("#results").prepend("<tr><td>" + snapshot.val().amount +
+                 "</td><td>" + snapshot.val().dateTime + "</td></tr>");
+         }
+     });
  } else {
      firebase.auth().signInWithPopup(provider).then(function(result) {
          var token = result.credential.accessToken;
@@ -27,6 +33,12 @@
          userId = user.uid;
          localStorage.setItem("userId", userId);
          dbStuff();
+         database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
+             if (dbOnceJustCalled === false) {
+                 $("#results").prepend("<tr><td>" + snapshot.val().amount +
+                     "</td><td>" + snapshot.val().dateTime + "</td></tr>");
+             }
+         });
      }).catch(function(error) {
          var errorCode = error.code;
          var errorMessage = error.message;
@@ -53,13 +65,6 @@
      function persistRecord(object) {
          database.ref("/userId:" + userId).push(object);
      }
-
-     database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
-         if (dbOnceJustCalled === false) {
-             $("#results").prepend("<tr><td>" + snapshot.val().amount +
-                 "</td><td>" + snapshot.val().dateTime + "</td></tr>");
-         }
-     });
  });
 
  function dbStuff() {
