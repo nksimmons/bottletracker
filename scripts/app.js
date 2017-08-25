@@ -38,7 +38,6 @@
  $(document).ready(function() {
      $("#datetimepicker").datetimepicker();
      $("#submit").on("click", function() {
-         dbOnceJustCalled = false;
          var amount = $("#amount").val();
          var dateTime = $("#dateTime").val();
          var bottleRecord = new BottleRecord(amount, dateTime);
