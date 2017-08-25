@@ -53,6 +53,13 @@
      function persistRecord(object) {
          database.ref("/userId:" + userId).push(object);
      }
+
+     database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
+         if (dbOnceJustCalled === false) {
+             $("#results").prepend("<tr><td>" + snapshot.val().amount +
+                 "</td><td>" + snapshot.val().dateTime + "</td></tr>");
+         }
+     });
  });
 
  function dbStuff() {
@@ -70,12 +77,5 @@
          }
      }, function(errorObject) {
          console.log("Errors handled: " + errorObject.code);
-     });
-
-     database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
-         if (dbOnceJustCalled === false) {
-             $("#results").prepend("<tr><td>" + snapshot.val().amount +
-                 "</td><td>" + snapshot.val().dateTime + "</td></tr>");
-         }
      });
  }
