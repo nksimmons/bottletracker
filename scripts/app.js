@@ -53,29 +53,29 @@
      function persistRecord(object) {
          database.ref("/userId:" + userId).push(object);
      }
-
-     function dbStuff() {
-         database.ref().once("value").then(function(childSnapshot) {
-             dbOnceJustCalled = true;
-             if (childSnapshot.val() !== null) {
-                 var userRecordKey = "userId:" + userId;
-                 var wholearr = childSnapshot.val()[userRecordKey];
-                 var keyArray = Object.keys(wholearr);
-
-                 keyArray.forEach(function(element) {
-                     $("#results").prepend("<tr><td>" + wholearr[element].amount +
-                         " </td><td> " + wholearr[element].dateTime + "</td></tr>");
-                 });
-             }
-         }, function(errorObject) {
-             console.log("Errors handled: " + errorObject.code);
-         });
-
-         database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
-             if (dbOnceJustCalled === false) {
-                 $("#results").prepend("<tr><td>" + snapshot.val().amount +
-                     "</td><td>" + snapshot.val().dateTime + "</td></tr>");
-             }
-         });
-     }
  });
+
+ function dbStuff() {
+     database.ref().once("value").then(function(childSnapshot) {
+         dbOnceJustCalled = true;
+         if (childSnapshot.val() !== null) {
+             var userRecordKey = "userId:" + userId;
+             var wholearr = childSnapshot.val()[userRecordKey];
+             var keyArray = Object.keys(wholearr);
+
+             keyArray.forEach(function(element) {
+                 $("#results").prepend("<tr><td>" + wholearr[element].amount +
+                     " </td><td> " + wholearr[element].dateTime + "</td></tr>");
+             });
+         }
+     }, function(errorObject) {
+         console.log("Errors handled: " + errorObject.code);
+     });
+
+     database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
+         if (dbOnceJustCalled === false) {
+             $("#results").prepend("<tr><td>" + snapshot.val().amount +
+                 "</td><td>" + snapshot.val().dateTime + "</td></tr>");
+         }
+     });
+ }
