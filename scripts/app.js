@@ -18,7 +18,7 @@
 
  if (localUserId != null) {
      userId = localUserId;
-     dbStuff();
+     loadInitialRecords();
  } else {
      firebase.auth().signInWithPopup(provider).then(function(result) {
          var token = result.credential.accessToken;
@@ -26,7 +26,7 @@
          userEmail = user;
          userId = user.uid;
          localStorage.setItem("userId", userId);
-         dbStuff();
+         loadInitialRecords();
      }).catch(function(error) {
          var errorCode = error.code;
          var errorMessage = error.message;
@@ -54,9 +54,8 @@
          database.ref("/userId:" + userId).push(object);
      }
 
-     console.log("uid" + userId);
-
      database.ref("/userId:" + userId).orderByKey().limitToLast(1).on("child_added", function(snapshot) {
+         console.log("child_added");
          if (dbOnceJustCalled === false) {
              $("#results").prepend("<tr><td>" + snapshot.val().amount +
                  "</td><td>" + snapshot.val().dateTime + "</td></tr>");
@@ -64,7 +63,7 @@
      });
  });
 
- function dbStuff() {
+ function loadInitialRecords() {
      database.ref().once("value").then(function(childSnapshot) {
          dbOnceJustCalled = true;
          if (childSnapshot.val() !== null) {
