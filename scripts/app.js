@@ -25,6 +25,7 @@
          var user = result.user;
          userEmail = user;
          userId = user.uid;
+         localStorage.setItem("userId", userId);
          dbStuff();
      }).catch(function(error) {
          var errorCode = error.code;
