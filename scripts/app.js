@@ -75,6 +75,7 @@
                  $("#results").prepend("<tr><td>" + wholearr[element].amount +
                      " </td><td> " + wholearr[element].dateTime + "</td></tr>");
              });
+             dbOnceJustCalled = false;
          }
      }, function(errorObject) {
          console.log("Errors handled: " + errorObject.code);
